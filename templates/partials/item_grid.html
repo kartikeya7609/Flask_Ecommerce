@@ -1,0 +1,95 @@
+<!-- Responsive Grid: 2 columns mobile, 4-6 columns desktop -->
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-px bg-white/5 border border-white/5 shadow-2xl overflow-hidden">
+    {% for item in current_items %}
+    <div class="group relative bg-[#16191D] flex flex-col hover:z-10 transition-all duration-500 hover:shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+        
+        <!-- Square Card Image Container -->
+        <div class="aspect-square relative overflow-hidden bg-[#1C2025]">
+            <!-- Subtle Shimmer Loading Effect -->
+            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_2s_infinite] pointer-events-none"></div>
+            
+            <a href="{{ url_for('item_details_page', item_id=item.id) }}" class="block w-full h-full">
+                <img src="{{ item.user_file if item.user_file.startswith('http') else url_for('static', filename='uploads/' + item.user_file) }}"
+                    alt="{{ item.name }}"
+                    loading="lazy"
+                    class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+            </a>
+
+            <!-- Premium Status Badges -->
+            <div class="absolute top-3 left-3 flex flex-col gap-1.5 pointer-events-none">
+                <span class="px-2 py-0.5 bg-black/60 backdrop-blur-md border border-white/10 text-[7px] font-black uppercase tracking-[0.2em] text-white shadow-2xl">
+                    {{ item.category }}
+                </span>
+                {% if item.stock < 5 and item.stock > 0 %}
+                <span class="px-2 py-0.5 bg-red-500/80 backdrop-blur-md text-[7px] font-black uppercase tracking-[0.2em] text-white shadow-2xl animate-pulse">
+                    Limit {{ item.stock }}
+                </span>
+                {% elif item.stock == 0 %}
+                <span class="px-2 py-0.5 bg-gray-500/80 backdrop-blur-md text-[7px] font-black uppercase tracking-[0.2em] text-white shadow-2xl">
+                    Sold Out
+                </span>
+                {% endif %}
+            </div>
+            
+            <!-- Sleek Action Overlay -->
+            <div class="absolute inset-0 bg-[#0F1115]/90 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center gap-3 p-6 backdrop-blur-sm translate-y-2 group-hover:translate-y-0">
+                {% if item.stock > 0 %}
+                <form action="{{ url_for('market_page') }}" method="POST" class="w-full">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="added_item" value="{{ item.name }}">
+                    <button type="submit" class="w-full py-3 bg-white text-black text-[9px] font-black uppercase tracking-widest hover:bg-gray-200 transition-all active:scale-95 shadow-2xl">
+                        Quick Add
+                    </button>
+                </form>
+                {% endif %}
+                <form action="{{ url_for('add_to_wishlist', item_id=item.id) }}" method="POST" class="w-full">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="w-full py-3 bg-white/5 border border-white/10 text-white text-[9px] font-black uppercase tracking-widest hover:bg-white/10 transition-all active:scale-95">
+                        Save for later
+                    </button>
+                </form>
+                <a href="{{ url_for('item_details_page', item_id=item.id) }}" class="text-[8px] font-black text-gray-500 hover:text-white transition-colors uppercase tracking-[0.3em] mt-1 border-b border-transparent hover:border-white/20 pb-0.5">
+                    View Asset
+                </a>
+            </div>
+        </div>
+
+        <!-- Card Content Area -->
+        <div class="p-5 flex-grow flex flex-col border-t border-white/5 bg-gradient-to-b from-transparent to-black/20">
+            <div class="flex items-center gap-0.5 mb-3">
+                {% for i in range(5) %}
+                <svg class="w-2 h-2 {% if i < item.average_rating|round(0, 'floor') %}text-amber-400 fill-current{% else %}text-gray-800{% endif %}" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                {% endfor %}
+                <span class="text-[7px] text-gray-700 font-black ml-1 uppercase tracking-widest">{{ item.reviews|length }} Reviews</span>
+            </div>
+            
+            <a href="{{ url_for('item_details_page', item_id=item.id) }}" class="block mb-4">
+                <h3 class="text-[10px] font-black text-white uppercase tracking-[0.1em] truncate leading-tight group-hover:text-blue-400 transition-colors">{{ item.name }}</h3>
+            </a>
+            
+            <div class="mt-auto pt-4 border-t border-white/5 flex items-end justify-between">
+                <div class="flex flex-col">
+                    <span class="text-[7px] font-black text-gray-700 uppercase tracking-[0.2em] mb-1">Pricing</span>
+                    <p class="text-xs font-black text-green-400 tracking-tight">₹{{ "%.2f"|format(item.price) }}</p>
+                </div>
+                <div class="h-6 w-px bg-white/5"></div>
+                <div class="flex flex-col items-end">
+                    <span class="text-[7px] font-black text-gray-700 uppercase tracking-[0.2em] mb-1">Stock</span>
+                    <span class="text-[8px] font-black {% if item.stock > 0 %}text-blue-400{% else %}text-red-500{% endif %} uppercase tracking-widest">
+                        {% if item.stock > 0 %}{{ item.stock }} Available{% else %}Out of Stock{% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+</style>

@@ -1,0 +1,5 @@
+name,price,barcode,description,stock,category,user_file
+"Cyberpunk Neon Jacket",12500.00,"112233445566","High-visibility street-wear with integrated LED piping.",15,"Apparel","https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3"
+"Vortex Gaming Mouse",4500.00,"998877665544","12000 DPI optical sensor with customizable weight system.",40,"Electronics","https://images.unsplash.com/photo-1527698266440-12104e498b76"
+"Onyx Smart Watch",24999.50,"554433221100","Sapphire glass display with 14-day battery life.",25,"Wearables","https://images.unsplash.com/photo-1523275335684-37898b6baf30"
+"Nebula Soundbar",15900.00,"776655443322","360-degree spatial audio with deep bass subwoofer.",10,"Home Audio","https://images.unsplash.com/photo-1543512214-318c7553f230"

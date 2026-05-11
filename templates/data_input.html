@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Add Item | Lucky Cart
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-[#0F1115] flex items-center justify-center px-4 py-12">
+    <div class="max-w-lg w-full p-1 bg-[#16191D] rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5">
+        <div class="bg-[#1C2025] p-8 md:p-10 rounded-[1.8rem] border border-white/[0.02]">
+            <div class="mb-10 text-left">
+                <h2 class="text-2xl font-semibold tracking-tight text-white/90">Add a New Item</h2>
+                <p class="mt-1 text-sm text-gray-500">Fill in the details below to add to the market.</p>
+            </div>
+
+            <form action="/add_item" method="POST" enctype="multipart/form-data" class="space-y-6">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="space-y-5">
+                    
+                    <div class="flex flex-col">
+                        <label class="text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Item Name</label>
+                        <div class="relative">
+                            <input type="text" id="name" name="name" required class="w-full px-4 py-3.5 bg-[#121418] border border-[#2A2F36] rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 focus:bg-[#0D0F12] transition-all duration-200 shadow-inner" placeholder="E.g., RTX 4090">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <label class="text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Price</label>
+                        <div class="relative">
+                            <input type="number" id="price" name="price" step="0.01" required class="w-full px-4 py-3.5 bg-[#121418] border border-[#2A2F36] rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 focus:bg-[#0D0F12] transition-all duration-200 shadow-inner" placeholder="E.g., 1599.99">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <label class="text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Stock Quantity</label>
+                        <div class="relative">
+                            <input type="number" id="stock" name="stock" min="1" step="1" required class="w-full px-4 py-3.5 bg-[#121418] border border-[#2A2F36] rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 focus:bg-[#0D0F12] transition-all duration-200 shadow-inner" placeholder="E.g., 50">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <label class="text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Barcode</label>
+                        <div class="relative">
+                            <input type="text" id="barcode" name="barcode" required class="w-full px-4 py-3.5 bg-[#121418] border border-[#2A2F36] rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 focus:bg-[#0D0F12] transition-all duration-200 shadow-inner" placeholder="12-digit Barcode">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <label class="text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Category</label>
+                        <div class="relative">
+                            <input type="text" id="category" name="category" required class="w-full px-4 py-3.5 bg-[#121418] border border-[#2A2F36] rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 focus:bg-[#0D0F12] transition-all duration-200 shadow-inner" placeholder="E.g., Electronics, Fashion, Home">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <label class="text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Description</label>
+                        <div class="relative">
+                            <input type="text" id="description" name="description" required class="w-full px-4 py-3.5 bg-[#121418] border border-[#2A2F36] rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 focus:bg-[#0D0F12] transition-all duration-200 shadow-inner" placeholder="Short description of the item">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <label class="text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Image File</label>
+                        <div class="relative mt-1">
+                            <input type="file" name="user_file" id="user_file" required class="w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-white file:text-black hover:file:bg-gray-200 transition-all cursor-pointer">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full flex items-center justify-center py-4 px-4 bg-white text-black hover:bg-gray-200 font-bold rounded-xl shadow-lg transition-all duration-200 cursor-pointer active:scale-[0.97]">
+                        <svg class="h-5 w-5 mr-2 text-black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+                        </svg>
+                        Add Item to Market
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-12 pt-10 border-t border-white/5">
+                <div class="mb-8 text-left">
+                    <h2 class="text-xl font-semibold tracking-tight text-white/90">Bulk Upload (CSV)</h2>
+                    <p class="mt-1 text-xs text-gray-500">Upload multiple items instantly using a spreadsheet.</p>
+                </div>
+
+                <form action="/upload_csv" method="POST" enctype="multipart/form-data" class="space-y-6">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="flex flex-col">
+                        <label class="text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Select CSV File</label>
+                        <div class="relative mt-1">
+                            <input type="file" name="file" id="csv_file" required accept=".csv" class="w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-white file:text-black hover:file:bg-gray-200 transition-all cursor-pointer">
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <a href="/download_template" class="text-[10px] font-bold text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            Download CSV Template
+                        </a>
+                    </div>
+
+                    <div class="pt-2">
+                        <button type="submit" class="w-full py-4 px-4 bg-white/5 border border-white/10 text-white hover:bg-white/10 font-bold rounded-xl transition-all duration-200 active:scale-[0.97]">
+                            Process Bulk Upload
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

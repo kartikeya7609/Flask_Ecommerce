@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt #NEX-{{ order.id }} | Lucky Cart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @media print {
+            .no-print { display: none; }
+            body { background: white; color: black; }
+            .receipt-container { border: none; box-shadow: none; }
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+    </style>
+</head>
+<body class="p-4 md:p-12">
+    <div class="max-w-4xl mx-auto bg-white p-8 md:p-16 rounded-lg shadow-sm border border-gray-100 receipt-container">
+        <!-- Receipt Header -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-100 pb-10 mb-10">
+            <div>
+                <h1 class="text-4xl font-black tracking-tighter text-black">LUCKY<span class="text-yellow-600">CART</span></h1>
+                <p class="text-gray-500 text-sm mt-1 uppercase tracking-widest font-bold">Official Transaction Receipt</p>
+            </div>
+            <div class="mt-6 md:mt-0 text-right">
+                <h2 class="text-xl font-bold text-gray-900">INVOICE</h2>
+                <p class="text-gray-500 text-sm">#NEX-{{ order.id }}</p>
+                <p class="text-gray-500 text-sm">{{ order.date_ordered.strftime('%B %d, %Y') }}</p>
+            </div>
+        </div>
+
+        <!-- Billing Info -->
+        <div class="grid grid-cols-2 gap-12 mb-16">
+            <div>
+                <h3 class="text-xs font-black text-gray-400 uppercase tracking-widest mb-4">Billed To</h3>
+                <p class="text-xl font-bold text-black">{{ order.user.username }}</p>
+                <p class="text-gray-500 text-sm">{{ order.user.email_address }}</p>
+            </div>
+            <div class="text-right">
+                <h3 class="text-xs font-black text-gray-400 uppercase tracking-widest mb-4">Payment Method</h3>
+                <p class="text-sm font-bold text-black">Account Balance</p>
+                <p class="text-gray-500 text-sm">Transaction Successful</p>
+            </div>
+        </div>
+
+        <!-- Items Table -->
+        <div class="mb-16 overflow-x-auto">
+            <table class="w-full text-left min-w-[500px]">
+                <thead>
+                    <tr class="border-b border-gray-100">
+                        <th class="py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Item Description</th>
+                        <th class="py-4 text-xs font-black text-gray-400 uppercase tracking-widest text-right">Qty</th>
+                        <th class="py-4 text-xs font-black text-gray-400 uppercase tracking-widest text-right">Price</th>
+                        <th class="py-4 text-xs font-black text-gray-400 uppercase tracking-widest text-right">Total</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-50">
+                    {% for item in order.items %}
+                    <tr>
+                        <td class="py-6">
+                            <p class="font-bold text-black">{{ item.item.name }}</p>
+                            <p class="text-xs text-gray-400 mt-1">{{ item.item.category }}</p>
+                        </td>
+                        <td class="py-6 text-right text-gray-600">{{ item.quantity }}</td>
+                        <td class="py-6 text-right text-gray-600">₹{{ "%.2f"|format(item.price) }}</td>
+                        <td class="py-6 text-right font-bold text-black">₹{{ "%.2f"|format(item.price * item.quantity) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Totals Breakdown -->
+        <div class="flex justify-end border-t border-gray-100 pt-10">
+            <div class="w-full md:w-1/3 space-y-4">
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-400">Subtotal</span>
+                    <span class="font-bold text-gray-900">₹{{ "%.2f"|format(order.total_price) }}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-400">Tax</span>
+                    <span class="font-bold text-gray-900">₹0.00</span>
+                </div>
+                <div class="flex justify-between text-2xl font-black border-t border-black pt-4">
+                    <span class="text-black uppercase tracking-tighter">Total Paid</span>
+                    <span class="text-black tracking-tighter">₹{{ "%.2f"|format(order.total_price) }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-24 text-center border-t border-gray-50 pt-10">
+            <p class="text-sm font-bold text-black">Thank you for your business!</p>
+            <p class="text-xs text-gray-400 mt-2">Lucky Cart | Premium Digital Exchange</p>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="max-w-4xl mx-auto mt-12 flex justify-between items-center no-print">
+        <a href="{{ url_for('my_orders_page') }}" class="text-sm font-bold text-gray-500 hover:text-black transition-all flex items-center gap-2">
+            &larr; Back to Orders
+        </a>
+        <button onclick="window.print()" class="px-8 py-3 bg-black text-white font-bold rounded-lg hover:bg-gray-800 transition-all shadow-xl">
+            Print Receipt
+        </button>
+    </div>
+</body>
+</html>
