@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nexus-v1';
+const CACHE_NAME = 'lucky-v1';
 const ASSETS = [
   '/',
   '/static/app_icon.png',

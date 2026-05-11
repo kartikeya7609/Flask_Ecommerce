@@ -626,7 +626,7 @@ def checkout():
     
     # Send Notifications to Sellers
     for seller_id in set(oi.item.seller_id for oi in order.items if oi.item.seller_id):
-        send_notification(seller_id, f"New Order #NEX-{order.id} received!")
+        send_notification(seller_id, f"New Order #LC-{order.id} received!")
 
     db.session.commit()
     flash(f"Purchase successful! Total paid: ₹{total_price:.2f}. <a href='{url_for('receipt_page', order_id=order.id)}' target='_blank' class='underline font-bold'>View Receipt</a>", category='success')
@@ -964,14 +964,14 @@ def update_order_status(order_id):
                 order_item.item.stock += order_item.quantity
             
             order.user.budget += order.total_price
-            send_notification(order.user_id, f"Your Order #NEX-{order.id} was rejected. Money refunded.")
+            send_notification(order.user_id, f"Your Order #LC-{order.id} was rejected. Money refunded.")
 
         elif new_status != order.status:
-            send_notification(order.user_id, f"Order #NEX-{order.id} status updated to {new_status}")
+            send_notification(order.user_id, f"Order #LC-{order.id} status updated to {new_status}")
 
         order.status = new_status
         db.session.commit()
-        flash(f"Order #NEX-{order.id} status updated to {new_status}.", category='success')
+        flash(f"Order #LC-{order.id} status updated to {new_status}.", category='success')
     else:
         flash("Invalid status update.", category='danger')
         
@@ -995,13 +995,13 @@ def cancel_order(order_id):
         order_item.item.stock += order_item.quantity
         # Notify Seller
         if seller:
-            send_notification(seller.id, f"Order #NEX-{order.id} was cancelled by the customer.")
+            send_notification(seller.id, f"Order #LC-{order.id} was cancelled by the customer.")
 
     order.user.budget += order.total_price
     order.status = 'Cancelled'
     
     db.session.commit()
-    flash(f"Order #NEX-{order.id} has been cancelled and refunded.", category='success')
+    flash(f"Order #LC-{order.id} has been cancelled and refunded.", category='success')
     return redirect(url_for('my_orders_page'))
 
 @app.route('/update_order_status/<int:order_id>')
